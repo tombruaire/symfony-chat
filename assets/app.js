@@ -7,4 +7,5 @@
  */
 import './styles/app.scss';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+// Importation de Bootstrap
+import 'bootstrap/dist/js/bootstrap.bundle.min';
