@@ -10,6 +10,10 @@ git clone https://github.com/tombruaire/symfony-chat.git
 2) Installer les dépendances de Symfony : 
 
 ```
+cd symfony-chat
+```
+
+```
 composer install
 ```
 
