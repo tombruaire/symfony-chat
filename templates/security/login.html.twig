@@ -1,41 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ parent() }} | Connexion{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+    <div class="container mt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-auto">
+                <div class="card card-header">
+                    <h1 class="text-center">Symfony Chat</h1>
+                </div>
             </div>
-        {% endif %}
+        </div>
+    </div>
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Username</label>
-        <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
+    {% if error %}
+        <div class="container mt-4">
+            <div class="row d-flex justify-content-center">
+                <div class="col-auto">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>{{ error.messageKey|trans(error.messageData, 'security') }}</strong>
+                    </div>
+                </div>
             </div>
-        #}
+        </div>
+    {% endif %}
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+    <div class="container mt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="fs-4 mb-0">Bonjour, veuillez-vous identififier ci-dessous : </p>
+                    </div>
+                    <form method="post">
+                        <div class="card-body">
+                            <div class="form-floating mb-3">
+                                <input type="text" name="_username" id="username" placeholder="Nom d'utilisateur" class="form-control" required>
+                                <label for="username">Nom d'utilisateur</label>
+                            </div>
+                            <div class="form-check mb-1">
+                                <input type="checkbox" id="show-mdp-checkbox" class="form-check-input" onclick="afficherMdp()">
+                                <label for="show-mdp-checkbox" class="form-check-label">
+                                    Afficher le mot de passe
+                                </label>
+                            </div>
+                            <div class="form-floating mb-1">
+                                <input type="password" name="_password" id="password" placeholder="Mot de passe" class="form-control" autocomplete="current-password" required>
+                                <label for="password">Mot de passe</label>
+                            </div>
+                            <div class="mb-3" align="right">
+                                <a href="javascript:void(0)" class="text-decoration-none">Mot de passe oublié ?</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input type="checkbox" name="_remember_me" id="_remember_me" class="form-check-input">
+                                <label for="_remember_me" class="form-check-label">
+                                    Se souvenir de moi
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <div class="card-footer">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-6">
+                                    <button type="reset" class="btn btn-danger w-100">
+                                        Annuler
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Connexion
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="row d-flex justify-content-center">
+            <div class="col-auto">
+                <p>Pas de compte ? <a href="{{ path('app_register') }}" class="text-decoration-none text-success">Créer un compte</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function afficherMdp() {
+            let inputPassword = document.getElementById("password");
+            if (inputPassword.type === "password") {
+                inputPassword.type = "text";
+            } else {
+                inputPassword.type = "password";
+            }
+        }
+    </script>
+
 {% endblock %}
