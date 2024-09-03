@@ -49,3 +49,6 @@ php bin/console doctrine:migrations:migrate
 ```
 symfony serv:start
 ```
+
+8) Accéder au chat
+- <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>
