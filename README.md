@@ -29,7 +29,22 @@ npm install
 npm run dev
 ```
 
-5) Démarrer l'application : 
+5) Si nécessaire, modifier la version de PHP dans le fichier `.php-version`
+
+6) Créer la base de données dans le fichier `.env` :
+- `app` (user)
+- `!ChangeMe!` (password)
+- `app` (database)
+
+```
+php bin/console doctrine:database:create
+```
+
+```
+php bin/console doctrine:migrations:migrate
+```
+
+7) Démarrer l'application : 
 
 ```
 symfony serv:start
