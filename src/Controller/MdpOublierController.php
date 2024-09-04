@@ -19,19 +19,30 @@ class MdpOublierController extends AbstractController
         $form = $this->createForm(MdpOublierType::class);
         $form->handleRequest($request);
 
+        $alert = "";
+
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupération de l'adresse email saisie dans l'input du formulaire
             $email = $form["email"]->getData();
+            // Recherche de l'adresse email dans la base de données
             $emailExist = $entityManager->getRepository(User::class)->checkEmail($email);
 
-            if ($emailExist === 1) {
+            // Vérification si l'adresse email de l'utilisateur existe
+            if ($emailExist === 1) { // Si l'adresse email existe
+                // Récupération du Token associé à l'adresse email
+                $token = $entityManager->getRepository(User::class)->getToken($email)["token"];
                 // Redirection vers le formulaire de réinitialisation du mot de passe
-                return $this->redirectToRoute('app_mdp_reset', ['email' => $email]);
+                return $this->redirectToRoute('app_mdp_reset', ['email' => $email, 'token'=>$token]);
+            } else { // Si l'adresse email n'existe pas
+                // Affichage d'un message d'erreur
+                $alert .= "Adresse email non trouvée !";
             }
         }
 
         return $this->render('mdp_oublier/index.html.twig', [
             'controller_name' => 'MdpOublierController',
             'MdpOublierForm' => $form,
+            'alert' => $alert,
         ]);
     }
 }
