@@ -12,7 +12,10 @@
                     </div>
                     <div class="card-body">
                         <p><b>ID :</b> {{ app.user.id }}</p>
-                        <p><b>Nom d'utilisateur :</b> {{ app.user.username }}</p>
+                        <p>
+                            <b>Nom d'utilisateur :</b> {{ app.user.username }}
+                            <a href="javascript:void(0)" class="text-decoration-none">Modifier</a>
+                        </p>
                         <p>
                             <b>Adresse email :</b> {{ app.user.email }}
                             <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalVerifierEmail">Vérifier</a>
