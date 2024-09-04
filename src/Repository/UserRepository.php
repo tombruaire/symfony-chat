@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use AllowDynamicProperties;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -12,10 +15,14 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 /**
  * @extends ServiceEntityRepository<User>
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+#[AllowDynamicProperties] class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $entityManager,
+    )
     {
+        $this->entityManager = $entityManager;
         parent::__construct($registry, User::class);
     }
 
@@ -51,6 +58,29 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('email', $email)
             ->getQuery()
             ->getResult()[0][1];
+    }
+
+    public function resetPassword($email, $password, UserPasswordHasherInterface $userPasswordHasher): void
+    {
+        // Recherche de l'utilisateur par son email
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        // Si l'adresse email de l'utilisateur existe
+        if ($user) {
+            // Mise à jour de son mot de passe en la hachant
+            $user->setPassword($userPasswordHasher->hashPassword($user, $password));
+            // Enregistrement des changements dans la base de données
+            $this->entityManager->flush();
+        }
+    }
+
+    public function getToken($email): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.token')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult()[0];
     }
 
 //    /**
