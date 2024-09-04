@@ -239,45 +239,4 @@
         }
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let btnGenerer = document.getElementById("btn-generer-mdp");
-            let mdpField = document.getElementById("mdp");
-            let chaine = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%;,!&%?()";
-
-            btnGenerer.onclick = function() {
-                let mdp = "";
-
-                // 2 lettres majuscules
-                mdp += chaine.charAt(Math.floor(Math.random() * 26));
-                mdp += chaine.charAt(Math.floor(Math.random() * 26));
-
-                // 2 lettres minuscules
-                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
-                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
-
-                // 2 chiffres
-                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
-                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
-
-                // 2 caractères spéciaux
-                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
-                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
-
-                // Mélanger les caractères du mot de passe
-                mdp = mdp.split('').sort(() => 0.5 - Math.random()).join('');
-
-                // Afficher le mot de passe généré dans le champ de texte
-                mdpField.value = mdp;
-            };
-
-            // Fonction pour copier le mot de passe dans le presse-papiers
-            let btnCopy = document.getElementById("btn-copier");
-            btnCopy.onclick = function() {
-                mdpField.select();
-                document.execCommand('copy');
-            };
-        });
-    </script>
-
 {% endblock %}
