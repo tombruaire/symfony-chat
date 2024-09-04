@@ -1,0 +1,280 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Profil{% endblock %}
+
+{% block body %}
+    <div class="container mt-4 mb-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Mon profil</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><b>ID :</b> {{ app.user.id }}</p>
+                        <p><b>Nom d'utilisateur :</b> {{ app.user.username }}</p>
+                        <p>
+                            <b>Adresse email :</b> {{ app.user.email }}
+                            <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalVerifierEmail">Vérifier</a>
+                            <br>
+                            <span class="form-text text-danger fw-bold">Adresse email non vérifiée</span>
+                        </p>
+                        <div class="modal fade" id="modalVerifierEmail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Vérification de l'adresse email</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" action="">
+                                        <div class="modal-body">
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-auto">
+                                                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCodeEmail">Envoyer un code de vérification</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modalCodeEmail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Code de vérification</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" action="">
+                                        <div class="modal-body">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="code" id="code" placeholder="Saisissez le code de vérification ici" class="form-control">
+                                                <label for="code">Saisissez le code de vérification ici</label>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-auto">
+                                                    <button type="submit" class="btn btn-success">
+                                                        C'est bien mon adresse email
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <p><b>Création du compte :</b> {{ app.user.dateCreation|format_datetime(locale='fr', pattern='dd/MM/yyyy HH:mm') }}</p>
+                        <p><b>Double authentification :</b> <span class="text-danger fw-bold">désactivé</span></p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-auto">
+                                <button class="btn w-100" data-bs-toggle="modal" data-bs-target="#modalWhatIsThe2FA" style="background-color: #AFEEEE;">
+                                    Qu'est-ce que la double authentification ?
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modalWhatIsThe2FA" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">La double authentification (2FA)</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p style="text-align: justify!important;">La double authentification est une sécurité supplémentaire ajouté à votre compte lors de la connexion.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-auto">
+                                <button class="btn w-100" data-bs-toggle="modal" data-bs-target="#modalFonctionnement2FA" style="background-color: #AFEEEE;">
+                                    Comment fonctionne la double authentification ?
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modalFonctionnement2FA" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Fonctionnement de la double authentification</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p style="text-align: justify!important;">Après avoir renseigner votre adresse email et votre mot de passe au moment de la connexion, il vous sera demandé de renseigner un code à 6 chiffres envoyé à votre adresse email.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-auto">
+                                <a href="javascript:void(0)" class="btn btn-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-shaded me-1" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 14.933a1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+                                    </svg>
+                                    Activer la double authentification
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-6">
+                                <a href="javascript:void(0)" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#modalEditMdp">
+                                    Modifier mon mot de passe
+                                </a>
+                                <div class="modal fade" id="modalEditMdp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5">Modification du mot de passe</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            {{ form_start(ModifierMdpForm) }}
+                                                <div class="modal-body">
+                                                    <div class="mb-2 rounded">
+                                                        <span>&nbsp;Votre nouveau mot de passe doit contenir au minimum :</span>
+                                                        <ul class="mt-1 mb-3">
+                                                            <li>8 caractères</li>
+                                                            <li>1 lettre majuscule</li>
+                                                            <li>1 lettre minuscule</li>
+                                                            <li>1 chiffre</li>
+                                                            <li>1 caractère spécial parmis : @ # $ % ; , ! & % ? ( )</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="form-check mb-1">
+                                                        <input type="checkbox" id="show-mdp-checkbox" class="form-check-input" onclick="afficherMdp()">
+                                                        <label for="show-mdp-checkbox" class="form-check-label">
+                                                            Afficher le mot de passe
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-floating">
+                                                        {{ form_row(ModifierMdpForm.password) }}
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="col-auto">
+                                                            <button type="submit" class="btn btn-success">
+                                                                Modifier mon mot de passe
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {{ form_end(ModifierMdpForm) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <a href="javascript:void(0)" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modalSupprimerCompte">
+                                    Supprimer mon compte
+                                </a>
+                                <div class="modal fade" id="modalSupprimerCompte" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5">Suppression du compte</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            {{ form_start(SupprimerCompteForm) }}
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        {{ form_row(SupprimerCompteForm.email) }}
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        {{ form_row(SupprimerCompteForm.password) }}
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="col-auto">
+                                                            <button type="submit" class="btn btn-danger w-100">
+                                                                Je supprime mon compte
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {{ form_end(SupprimerCompteForm) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.form-floating > div > ul > li').classList.add("text-danger");
+        document.querySelector('.form-floating > div > ul > li').classList.add("mt-2");
+
+        function afficherMdp() {
+            let inputPassword1 = document.getElementById("modifier_mdp_password_first");
+            let inputPassword2 = document.getElementById("modifier_mdp_password_second");
+
+            if (inputPassword1.type === "password") {
+                inputPassword1.type = "text";
+            } else {
+                inputPassword1.type = "password";
+            }
+
+            if (inputPassword2.type === "password") {
+                inputPassword2.type = "text";
+            } else {
+                inputPassword2.type = "password";
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let btnGenerer = document.getElementById("btn-generer-mdp");
+            let mdpField = document.getElementById("mdp");
+            let chaine = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%;,!&%?()";
+
+            btnGenerer.onclick = function() {
+                let mdp = "";
+
+                // 2 lettres majuscules
+                mdp += chaine.charAt(Math.floor(Math.random() * 26));
+                mdp += chaine.charAt(Math.floor(Math.random() * 26));
+
+                // 2 lettres minuscules
+                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
+                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
+
+                // 2 chiffres
+                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
+                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
+
+                // 2 caractères spéciaux
+                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
+                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
+
+                // Mélanger les caractères du mot de passe
+                mdp = mdp.split('').sort(() => 0.5 - Math.random()).join('');
+
+                // Afficher le mot de passe généré dans le champ de texte
+                mdpField.value = mdp;
+            };
+
+            // Fonction pour copier le mot de passe dans le presse-papiers
+            let btnCopy = document.getElementById("btn-copier");
+            btnCopy.onclick = function() {
+                mdpField.select();
+                document.execCommand('copy');
+            };
+        });
+    </script>
+
+{% endblock %}
