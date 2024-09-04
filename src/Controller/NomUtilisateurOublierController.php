@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\MdpOublierType;
+use App\Entity\User;
 use App\Form\NomUtilisateurOublierType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,16 +18,31 @@ class NomUtilisateurOublierController extends AbstractController
         $form = $this->createForm(NomUtilisateurOublierType::class);
         $form->handleRequest($request);
 
+        $username = "";
         $alert = "";
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //
+            // Récupération de l'adresse email saisie dans l'input du formulaire
+            $email = $form["email"]->getData();
+            // Recherche de l'adresse email dans la base de données
+            $emailExist = $entityManager->getRepository(User::class)->checkEmail($email);
+
+            // Vérification si l'adresse email de l'utilisateur existe
+            if ($emailExist === 1) { // Si l'adresse email existe
+                // Récupération du nom d'utilisateur
+                $username .= $entityManager->getRepository(User::class)->getUsername($email)["username"];
+
+            } else { // Si l'adresse email n'existe pas
+                // Affichage d'un message d'erreur
+                $alert .= "Aucun nom d'utilisateur associé à cette adresse email !";
+            }
         }
 
         return $this->render('nom_utilisateur_oublier/index.html.twig', [
             'controller_name' => 'NomUtilisateurOublierController',
             'NomUtilisateurOublierForm' => $form,
             'alert' => $alert,
+            'username' => $username,
         ]);
     }
 }
