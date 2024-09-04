@@ -142,9 +142,9 @@
                                             </div>
                                             {{ form_start(ModifierMdpForm) }}
                                                 <div class="modal-body">
-                                                    <div class="mb-2 rounded">
-                                                        <span>&nbsp;Votre nouveau mot de passe doit contenir au minimum :</span>
-                                                        <ul class="mt-1 mb-3">
+                                                    <div class="mb-3 rounded alert alert-warning">
+                                                        <span class="fw-bold">&nbsp;Votre nouveau mot de passe doit contenir au minimum :</span>
+                                                        <ul class="mt-1 mb-0 fw-bold">
                                                             <li>8 caractères</li>
                                                             <li>1 lettre majuscule</li>
                                                             <li>1 lettre minuscule</li>
@@ -152,7 +152,7 @@
                                                             <li>1 caractère spécial parmis : @ # $ % ; , ! & % ? ( )</li>
                                                         </ul>
                                                     </div>
-                                                    <div class="form-check mb-1">
+                                                    <div class="form-check mb-3">
                                                         <input type="checkbox" id="show-mdp-checkbox" class="form-check-input" onclick="afficherMdp()">
                                                         <label for="show-mdp-checkbox" class="form-check-label">
                                                             Afficher le mot de passe
@@ -160,6 +160,15 @@
                                                     </div>
                                                     <div class="form-floating">
                                                         {{ form_row(ModifierMdpForm.password) }}
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="col-auto">
+                                                            <div class="alert alert-info" role="alert">
+                                                                <strong>Vous serez déconnecté après la validation</strong>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="card-footer">
