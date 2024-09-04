@@ -3,7 +3,8 @@
 {% block title %}{{ parent() }} | Inscription{% endblock %}
 
 {% block body %}
-    {{ form_errors(registrationForm) }}
+
+    {% include 'alert.html.twig' %}
 
     <div class="container mt-4">
         <div class="row d-flex justify-content-center">
@@ -74,6 +75,9 @@
     </div>
 
     <script>
+        document.querySelector('.form-floating > div > ul > li').classList.add("text-danger");
+        document.querySelector('.form-floating > div > ul > li').classList.add("mt-2");
+
         function afficherMdp() {
             let inputPassword1 = document.getElementById("registration_form_password_first");
             let inputPassword2 = document.getElementById("registration_form_password_second");
