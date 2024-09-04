@@ -7,7 +7,7 @@
 git clone https://github.com/tombruaire/symfony-chat.git
 ```
 
-2) Renseigner les valeurs ci-dessous dans le fichier `.env` :
+2) Renseigner les valeurs ci-dessous dans le fichier `.env` en supprimant le `#` de la ligne `DATABASE_URL` :
 - `app` (user)
 - `!ChangeMe!` (password)
 - `app` (database)
