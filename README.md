@@ -7,31 +7,7 @@
 git clone https://github.com/tombruaire/symfony-chat.git
 ```
 
-2) Installer les dépendances de Symfony : 
-
-```
-cd symfony-chat
-```
-
-```
-composer install
-```
-
-3) Installer les dépendances Node.js :
-
-```
-npm install
-```
-
-4) Charger les ressources (css, js, img, etc...) : 
-
-```
-npm run dev
-```
-
-5) Si nécessaire, modifier la version de PHP dans le fichier `.php-version`
-
-6) Créer la base de données dans le fichier `.env` :
+2) Créer la base de données dans le fichier `.env` :
 - `app` (user)
 - `!ChangeMe!` (password)
 - `app` (database)
@@ -43,6 +19,31 @@ php bin/console doctrine:database:create
 ```
 php bin/console doctrine:migrations:migrate
 ```
+
+3) Installer les dépendances de Symfony : 
+
+```
+cd symfony-chat
+```
+
+```
+composer install
+```
+
+4) Installer les dépendances Node.js :
+
+```
+npm install
+```
+
+5) Charger les ressources (css, js, img, etc...) : 
+
+```
+npm run dev
+```
+
+6) Si nécessaire, modifier la version de PHP dans le fichier `.php-version`
+
 
 7) Démarrer l'application : 
 
