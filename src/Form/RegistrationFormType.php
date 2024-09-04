@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -47,10 +48,14 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => "off",
+                    'placeholder' => "Doit contenir un @",
                 ],
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir une adresse email !",
+                    ]),
+                    new Email([
+                        'message' => "Format de l'adresse email incorrect !",
                     ]),
                 ]
             ])
