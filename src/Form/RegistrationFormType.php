@@ -26,6 +26,15 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => "off",
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "Veuillez saisir un nom d'utilisateur !",
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z0-9]+$/',
+                        'message' => "Le nom d'utilisateur ne doit pas contenir d'espaces ni de caractères spéciaux !.",
+                    ]),
                 ]
             ])
             ->add('email', EmailType::class, [
@@ -33,6 +42,11 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => "off",
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "Veuillez saisir une adresse email !",
+                    ]),
                 ]
             ])
             ->add('password', RepeatedType::class, [
