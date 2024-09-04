@@ -62,6 +62,8 @@ class RegistrationFormType extends AbstractType
                     'attr' => [
                         'class' => 'form-control',
                         'autocomplete' => 'off',
+                        'onclick' => 'afficherBoxPatternMdp()',
+                        // 'onblur' => 'masquerBoxPatternMdp()',
                     ]
                 ],
                 'constraints' => [
@@ -69,8 +71,8 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Veuillez saisir un mot de passe !',
                     ]),
                     new Regex([
-                        'pattern' => '/^.{12,}$/',
-                        'message' => 'Votre mot de passe doit contenir 12 caractères',
+                        'pattern' => '/^.{8,}$/',
+                        'message' => 'Votre mot de passe doit contenir 8 caractères',
                     ]),
                     new Regex([
                         'pattern' => '/[A-Z]/',
