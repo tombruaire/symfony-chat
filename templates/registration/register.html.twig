@@ -18,9 +18,11 @@
                         <div class="card-body">
                             <div class="form-floating mb-3">
                                 {{ form_row(registrationForm.username) }}
+                                <div class="form-text text-danger fw-bold" id="username-used-txt" style="display: none;">&nbsp;Nom d'utilisateur déjà utilisé !</div>
                             </div>
                             <div class="form-floating mb-3">
                                 {{ form_row(registrationForm.email) }}
+                                <div class="form-text text-danger fw-bold" id="email-used-txt" style="display: none;">&nbsp;Adresse email déjà utilisée !</div>
                             </div>
                             <div class="mb-2 rounded" id="box-pattern-mdp" style="background-color: #FFFACD; display: none;">
                                 <span>&nbsp;Votre mot de passe doit contenir au minimum :</span>
