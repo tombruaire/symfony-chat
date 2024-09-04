@@ -57,6 +57,10 @@ class RegistrationFormType extends AbstractType
                     new Email([
                         'message' => "Format de l'adresse email incorrect !",
                     ]),
+                    new Regex([
+                        'pattern' => '/^\S+$/',
+                        'message' => "L'adresse email ne doit pas contenir d'espaces.",
+                    ]),
                 ]
             ])
             ->add('password', RepeatedType::class, [
