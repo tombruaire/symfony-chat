@@ -4,8 +4,6 @@
 
 {% block body %}
 
-    {% include 'alert.html.twig' %}
-
     <div class="container mt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-md-5">
@@ -20,6 +18,42 @@
                             </div>
                             <div class="form-floating mb-3">
                                 {{ form_row(registrationForm.email) }}
+                            </div>
+                            <div class="mb-2 rounded" id="box-pattern-mdp" style="background-color: #FFFACD; display: none;">
+                                <span>&nbsp;Votre mot de passe doit contenir au minimum :</span>
+                                <ul class="mb-2">
+                                    <li>8 caractères</li>
+                                    <li>1 lettre majuscule</li>
+                                    <li>1 lettre minuscule</li>
+                                    <li>1 chiffre</li>
+                                    <li>1 caractère spécial parmis : @ # $ % ; , ! & % ? ( )</li>
+                                </ul>&nbsp;
+                                <button class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#modalGenererMdp">Générer un mot de passe</button>
+                                <div class="modal fade" id="modalGenererMdp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5">Génération d'un mot de passe</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="input-group mb-3">
+                                                    <input type="text" name="mdp" id="mdp" class="form-control" aria-describedby="mdp" readonly>
+                                                    <span class="input-group-text" id="mdp">
+                                                        <button id="btn-copier" class="btn">Copier</button>
+                                                    </span>
+                                                </div>
+                                                <div class="row d-flex justify-content-center">
+                                                    <div class="col-md-12">
+                                                        <button type="button" id="btn-generer-mdp" class="btn btn-primary">
+                                                            Générer un mot de passe
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-check mb-1">
                                 <input type="checkbox" id="show-mdp-checkbox" class="form-check-input" onclick="afficherMdp()">
@@ -97,6 +131,55 @@
                 inputPassword2.type = "password";
             }
         }
+
+        function afficherBoxPatternMdp() {
+            document.getElementById("box-pattern-mdp").style.display = "block";
+        }
+
+        function masquerBoxPatternMdp() {
+            document.getElementById("box-pattern-mdp").style.display = "none";
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let btnGenerer = document.getElementById("btn-generer-mdp");
+            let mdpField = document.getElementById("mdp");
+            let chaine = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%;,!&%?()";
+
+            btnGenerer.onclick = function() {
+                let mdp = "";
+
+                // 2 lettres majuscules
+                mdp += chaine.charAt(Math.floor(Math.random() * 26));
+                mdp += chaine.charAt(Math.floor(Math.random() * 26));
+
+                // 2 lettres minuscules
+                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
+                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
+
+                // 2 chiffres
+                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
+                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
+
+                // 2 caractères spéciaux
+                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
+                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
+
+                // Mélanger les caractères du mot de passe
+                mdp = mdp.split('').sort(() => 0.5 - Math.random()).join('');
+
+                // Afficher le mot de passe généré dans le champ de texte
+                mdpField.value = mdp;
+            };
+
+            // Fonction pour copier le mot de passe dans le presse-papiers
+            let btnCopy = document.getElementById("btn-copier");
+            btnCopy.onclick = function() {
+                mdpField.select();
+                document.execCommand('copy');
+            };
+        });
     </script>
 
 {% endblock %}
