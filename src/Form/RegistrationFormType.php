@@ -22,10 +22,11 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => "Nom d'utilisateur",
+                'label' => "Nom d'utilisateur * (10 caractères maximum)",
                 'attr' => [
                     'class' => 'form-control',
-                    'autocomplete' => "off",
+                    'autocomplete' => 'off',
+                    'placeholder' => "Pas d'espaces, ni de caractères spéciaux",
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -35,10 +36,14 @@ class RegistrationFormType extends AbstractType
                         'pattern' => '/^[a-zA-Z0-9]+$/',
                         'message' => "Le nom d'utilisateur ne doit pas contenir d'espaces ni de caractères spéciaux !.",
                     ]),
+                    new Regex([
+                        'pattern' => '/^.{1,10}$/',
+                        'message' => "Le nom d'utilisateur ne doit pas dépasser 10 caractères.",
+                    ]),
                 ]
             ])
             ->add('email', EmailType::class, [
-                'label' => "Adresse email",
+                'label' => "Adresse email *",
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => "off",
@@ -52,16 +57,17 @@ class RegistrationFormType extends AbstractType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'label' => 'Mot de passe',
+                    'label' => 'Mot de passe *',
                 ],
                 'second_options' => [
-                    'label' => 'Confirmation du mot de passe'
+                    'label' => 'Confirmation du mot de passe *'
                 ],
                 'invalid_message' => 'Les mots de passes ne correspondent pas !',
                 'options' => [
                     'attr' => [
                         'class' => 'form-control',
                         'autocomplete' => 'off',
+                        'placeholder' => "Cliquer ici pour afficher le pattern demandé",
                         'onclick' => 'afficherBoxPatternMdp()',
                         // 'onblur' => 'masquerBoxPatternMdp()',
                     ]
