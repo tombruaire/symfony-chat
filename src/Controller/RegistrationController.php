@@ -22,18 +22,70 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            // Vérification si le Nom d'utilisateur est déjà utilisé
+            $username = $form["username"]->getData();
+            $usernameExist = $entityManager->getRepository(User::class)->checkUsername($username);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            // Vérification si l'Adresse email est déjà utilisée
+            $email = $form["email"]->getData();
+            $emailExist = $entityManager->getRepository(User::class)->checkEmail($email);
 
-            // do anything else you need here, like send an email
+            // Si le Nom d'utilisateur et l'Adresse email ne sont pas utilisés
+            if ($usernameExist === 0 && $emailExist === 0) {
+                // Hachage du Mot de passe
+                $password = $form["password"]->getData();
+                $user->setPassword($userPasswordHasher->hashPassword($user, $password));
 
-            return $this->redirectToRoute('app_login');
+                // Définition de la Date et heure d'inscription
+                $user->setDateCreation(new \DateTime());
+
+                // Génération d'un token de 20 caractères
+                function generateToken(): string
+                {
+                    $chaine = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                    $token = "";
+
+                    // 5 lettres majuscules
+                    $token .= $chaine[rand(0,25)];
+                    $token .= $chaine[rand(0,25)];
+                    $token .= $chaine[rand(0,25)];
+                    $token .= $chaine[rand(0,25)];
+                    $token .= $chaine[rand(0,25)];
+
+                    // 5 lettres minuscules
+                    $token .= $chaine[rand(26,51)];
+                    $token .= $chaine[rand(26,51)];
+                    $token .= $chaine[rand(26,51)];
+                    $token .= $chaine[rand(26,51)];
+                    $token .= $chaine[rand(26,51)];
+
+                    // 10 chiffres
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+                    $token .= $chaine[rand(52,60)];
+
+                    $token = str_shuffle($token);
+
+                    return $token;
+                }
+                $user->setToken(generateToken());
+
+                // Ajout du nouvel utilisateur dans la base de données
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Redirection vers la page de connexion
+                return $this->redirectToRoute('app_login');
+            }
         }
 
         return $this->render('registration/register.html.twig', [
