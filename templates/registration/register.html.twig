@@ -3,17 +3,93 @@
 {% block title %}{{ parent() }} | Inscription{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
-
     {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    <div class="container mt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="fs-4 mb-0">Création d'un compte : </p>
+                    </div>
+                    {{ form_start(registrationForm) }}
+                        <div class="card-body">
+                            <div class="form-floating mb-3">
+                                {{ form_row(registrationForm.username) }}
+                            </div>
+                            <div class="form-check mb-1">
+                                <input type="checkbox" id="show-mdp-checkbox" class="form-check-input" onclick="afficherMdp()">
+                                <label for="show-mdp-checkbox" class="form-check-label">
+                                    Afficher le mot de passe
+                                </label>
+                            </div>
+                            <div class="form-floating mb-1">
+                                {{ form_row(registrationForm.password) }}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p>En cliquant sur <code>Créer un compte</code>, vous acceptez les <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalCGU">conditions générales d'utilisation</a></p>
+                            <div class="modal fade" id="modalCGU" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5">Conditions Générales d'Utilisation</h1>
+                                        </div>
+                                        <div class="modal-body">
+                                            ...
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">C'est ok pour moi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-6">
+                                    <button type="reset" class="btn btn-danger w-100">
+                                        Annuler
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-success w-100">
+                                        Créer un compte
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    <div class="container mt-3">
+        <div class="row d-flex justify-content-center">
+            <div class="col-auto">
+                <p>Déjà un compte ? <a href="{{ path('app_login') }}" class="text-decoration-none">Se connecter</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function afficherMdp() {
+            let inputPassword1 = document.getElementById("registration_form_password_first");
+            let inputPassword2 = document.getElementById("registration_form_password_second");
+
+            if (inputPassword1.type === "password") {
+                inputPassword1.type = "text";
+            } else {
+                inputPassword1.type = "password";
+            }
+
+            if (inputPassword2.type === "password") {
+                inputPassword2.type = "text";
+            } else {
+                inputPassword2.type = "password";
+            }
+        }
+    </script>
+
 {% endblock %}
