@@ -46,6 +46,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Messages::class, mappedBy: 'userFrom')]
     private Collection $messages;
 
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $token = null;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -163,6 +169,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $message->setUserFrom(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): static
+    {
+        $this->token = $token;
 
         return $this;
     }
