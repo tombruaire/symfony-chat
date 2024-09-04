@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,6 +23,13 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('username', TextType::class, [
                 'label' => "Nom d'utilisateur",
+                'attr' => [
+                    'class' => 'form-control',
+                    'autocomplete' => "off",
+                ]
+            ])
+            ->add('email', EmailType::class, [
+                'label' => "Adresse email",
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => "off",
@@ -47,10 +55,27 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Veuillez saisir un mot de passe !',
                     ]),
                     new Regex([
-                        'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%;,!&()]){12,}/i',
-                        'message' => 'Pattern non respecté !',
+                        'pattern' => '/^.{12,}$/',
+                        'message' => 'Votre mot de passe doit contenir 12 caractères',
+                    ]),
+                    new Regex([
+                        'pattern' => '/[A-Z]/',
+                        'message' => 'Votre mot de passe doit contenir une lettre majuscule',
+                    ]),
+                    new Regex([
+                        'pattern' => '/[a-z]/',
+                        'message' => 'Votre mot de passe doit contenir une lettre minuscule',
+                    ]),
+                    new Regex([
+                        'pattern' => '/\d/',
+                        'message' => 'Votre mot de passe doit contenir un chiffre',
+                    ]),
+                    new Regex([
+                        'pattern' => '/[@#$%;,!&%?()]/',
+                        'message' => 'Votre mot de passe doit contenir un caractère spécial',
                     ]),
                 ],
+
             ])
         ;
     }
