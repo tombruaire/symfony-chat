@@ -83,6 +83,16 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
             ->getResult()[0];
     }
 
+    public function getUsername($email): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.username')
+            ->where('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult()[0];
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
