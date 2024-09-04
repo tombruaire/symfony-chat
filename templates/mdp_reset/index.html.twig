@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Rénitialisation du mot de passe{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="fs-4 mb-0">Rénitialisation du mot de passe</p>
+                    </div>
+                    <div class="card-header">
+                        <p class="fs-5 mb-0">Adresse email : <i>{{ email }}</i></p>
+                    </div>
+                    <div class="card-header bg-warning">
+                        <span class="fw-bold">* Champ obligatoire</span>
+                    </div>
+                    {{ form_start(MdpResetForm) }}
+                    <div class="card-body">
+                        <div class="mb-2 rounded" id="box-pattern-mdp" style="background-color: #FFFACD; display: none;">
+                            <span>&nbsp;Votre nouveau mot de passe doit contenir au minimum :</span>
+                            <ul class="mb-2">
+                                <li>8 caractères</li>
+                                <li>1 lettre majuscule</li>
+                                <li>1 lettre minuscule</li>
+                                <li>1 chiffre</li>
+                                <li>1 caractère spécial parmis : @ # $ % ; , ! & % ? ( )</li>
+                            </ul>&nbsp;
+                            <button class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#modalGenererMdp">Générer un mot de passe</button>
+                            <div class="modal fade" id="modalGenererMdp" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5">Génération d'un nouveau mot de passe</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <input type="text" name="mdp" id="mdp" class="form-control" aria-describedby="mdp" readonly>
+                                                <span class="input-group-text" id="mdp">
+                                                        <button id="btn-copier" class="btn">Copier</button>
+                                                    </span>
+                                            </div>
+                                            <div class="row d-flex justify-content-center">
+                                                <div class="col-md-12">
+                                                    <button type="button" id="btn-generer-mdp" class="btn btn-primary">
+                                                        Générer un nouveau mot de passe
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-check mb-1">
+                            <input type="checkbox" id="show-mdp-checkbox" class="form-check-input" onclick="afficherMdp()">
+                            <label for="show-mdp-checkbox" class="form-check-label">
+                                Afficher le mot de passe
+                            </label>
+                        </div>
+                        <div class="form-floating mb-1">
+                            {{ form_row(MdpResetForm.password) }}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-6">
+                                <button type="reset" class="btn btn-danger w-100">
+                                    Annuler
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-success w-100">
+                                    Réinitialiser
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(MdpResetForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="row d-flex justify-content-center">
+            <div class="col-auto">
+                <p><a href="{{ path('app_login') }}" class="text-decoration-none text-primary">J'ai retrouvé mon mot de passe !</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.form-floating > div > ul > li').classList.add("text-danger");
+        document.querySelector('.form-floating > div > ul > li').classList.add("mt-2");
+
+        function afficherMdp() {
+            let inputPassword1 = document.getElementById("registration_form_password_first");
+            let inputPassword2 = document.getElementById("registration_form_password_second");
+
+            if (inputPassword1.type === "password") {
+                inputPassword1.type = "text";
+            } else {
+                inputPassword1.type = "password";
+            }
+
+            if (inputPassword2.type === "password") {
+                inputPassword2.type = "text";
+            } else {
+                inputPassword2.type = "password";
+            }
+        }
+
+        function afficherBoxPatternMdp() {
+            document.getElementById("box-pattern-mdp").style.display = "block";
+        }
+
+        function masquerBoxPatternMdp() {
+            document.getElementById("box-pattern-mdp").style.display = "none";
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let btnGenerer = document.getElementById("btn-generer-mdp");
+            let mdpField = document.getElementById("mdp");
+            let chaine = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%;,!&%?()";
+
+            btnGenerer.onclick = function() {
+                let mdp = "";
+
+                // 2 lettres majuscules
+                mdp += chaine.charAt(Math.floor(Math.random() * 26));
+                mdp += chaine.charAt(Math.floor(Math.random() * 26));
+
+                // 2 lettres minuscules
+                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
+                mdp += chaine.charAt(26 + Math.floor(Math.random() * 26));
+
+                // 2 chiffres
+                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
+                mdp += chaine.charAt(52 + Math.floor(Math.random() * 10));
+
+                // 2 caractères spéciaux
+                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
+                mdp += chaine.charAt(62 + Math.floor(Math.random() * 12));
+
+                // Mélanger les caractères du mot de passe
+                mdp = mdp.split('').sort(() => 0.5 - Math.random()).join('');
+
+                // Afficher le mot de passe généré dans le champ de texte
+                mdpField.value = mdp;
+            };
+
+            // Fonction pour copier le mot de passe dans le presse-papiers
+            let btnCopy = document.getElementById("btn-copier");
+            btnCopy.onclick = function() {
+                mdpField.select();
+                document.execCommand('copy');
+            };
+        });
+    </script>
+
+{% endblock %}
