@@ -16,6 +16,17 @@ class MessagesRepository extends ServiceEntityRepository
         parent::__construct($registry, Messages::class);
     }
 
+    /**
+     * @return Messages[] Returns an array of Messages objects
+     */
+    public function finAllMessages(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.userTo IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Messages[] Returns an array of Messages objects
 //     */
