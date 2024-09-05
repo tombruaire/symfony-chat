@@ -47,7 +47,7 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
             'users' => $entityManager->getRepository(User::class)->findAll(),
             'ChatForm' => $form,
-            'messages' => $entityManager->getRepository(Messages::class)->finAllMessages(),
+            'messages' => $entityManager->getRepository(Messages::class)->findAllMessages(),
         ]);
     }
 }
