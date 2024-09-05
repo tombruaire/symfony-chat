@@ -67,8 +67,6 @@
                             {% if messages %}
                                 {% for message in messages %}
 
-                                    <p></p>
-
                                     <!-- MESSAGES DES AUTRES UTILISATEURS -->
                                     {% if message.userFrom != app.user %}
                                         <div class="chat-msg">
