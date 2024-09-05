@@ -187,4 +187,30 @@
         });
     </script>
 
+    <script>
+        /* SUPPRESSION DES ESPACES */
+
+        // Suppression des espaces pour le Nom d'utilisateur
+        $("input#registration_form_username").on({
+            keydown: function(e) {
+                if (e.which === 32)
+                    return false
+            },
+            change: function() {
+                this.value = this.value.replace(/\s/g, "");
+            }
+        });
+
+        // Suppression des espaces pour l'Adresse email
+        $("input#registration_form_email").on({
+            keydown: function(e) {
+                if (e.which === 32)
+                    return false
+            },
+            change: function() {
+                this.value = this.value.replace(/\s/g, "");
+            }
+        });
+    </script>
+
 {% endblock %}
