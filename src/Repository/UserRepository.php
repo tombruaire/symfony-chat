@@ -69,7 +69,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
             // Mise à jour de son mot de passe en la hachant
             $user->setPassword($userPasswordHasher->hashPassword($user, $password));
             // Mise à jour du statut de l'utilisateur (online)
-            $user->setSalt(false);
+            $user->setOnline(false);
             // Enregistrement des changements dans la base de données
             $this->entityManager->flush();
         }
