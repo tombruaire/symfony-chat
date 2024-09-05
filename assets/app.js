@@ -9,3 +9,6 @@ import './styles/app.scss';
 
 // Importation de Bootstrap
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+
+// Importation jQuery
+const $ = require('jquery');
