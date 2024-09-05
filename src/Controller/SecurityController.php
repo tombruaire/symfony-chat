@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,10 +11,18 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, EntityManagerInterface $entityManager): Response
     {
         // Si l'utilisateur est connecté
         if ($this->getUser()) {
+
+            // Récupération de l'utilisateur connecté
+            $user = $this->getUser();
+
+            // Mise à jour de son statut de connexion (online)
+            $user->setOnline(true);
+            $entityManager->flush();
+
             // Redirection vers la page d'accueil
             return $this->redirectToRoute('app_home');
         }
