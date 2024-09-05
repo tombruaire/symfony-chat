@@ -28,6 +28,7 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                     'autocomplete' => 'off',
                     'placeholder' => "Pas d'espaces, ni de caractères spéciaux",
+                    'maxlength' => '10',
                 ],
                 'constraints' => [
                     new NotBlank([
