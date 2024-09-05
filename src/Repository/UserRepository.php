@@ -95,6 +95,19 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
             ->getResult()[0];
     }
 
+    /**
+     * @param $username
+     * @return User|null Returns an array of User objects
+     */
+    public function findUserTo($username): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult(); // Utilisation de "getOneOrNullResult" pour obtenir un résultat ou null
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
