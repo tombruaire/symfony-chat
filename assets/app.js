@@ -8,4 +8,4 @@
 import './styles/app.scss';
 
 // Importation de Bootstrap
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+// import 'bootstrap/dist/js/bootstrap.bundle.min';
