@@ -16,4 +16,129 @@
         </div>
     {% endif %}
 
+    <div class="container mt-4 mb-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-3">
+                <main class="d-flex flex-nowrap">
+                    <div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;">
+                        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                            <span class="fs-4">Général</span>
+                        </a>
+                        <hr>
+                        <form method="get" action="">
+                            <div class="form-floating">
+                                <input type="search" name="user" id="user" placeholder="Rechercher un utilisateur..." class="form-control">
+                                <label for="user">Rechercher un utilisateur...</label>
+                            </div>
+                        </form>
+                        <hr>
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            {% for user in users %}
+                                {% if user.id != app.user.id %}
+                                    <li class="nav-item">
+                                        <a href="{{ path('app_room', {'username': user.username}) }}" class="nav-link link-body-emphasis" aria-current="page">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person me-2" viewBox="0 0 16 16">
+                                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                                            </svg>
+                                            {{ user.username }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li>
+                                <a href="javascript:void(0)" class="nav-link link-body-emphasis text-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person me-2" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                                    </svg>
+                                    User 3 (connecté)
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </main>
+            </div>
+            <div class="col-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Discussion générale</h4>
+                    </div>
+                    <div class="card-body">
+                        <div style="flex-grow: 1;">
+                            {% if messages %}
+                                {% for message in messages %}
+
+                                    <p></p>
+
+                                    <!-- MESSAGES DES AUTRES UTILISATEURS -->
+                                    {% if message.userFrom != app.user %}
+                                        <div class="chat-msg">
+                                            <div class="chat-msg-profile">
+                                                <div class="chat-msg-date">{{ message.dateEnvoi|format_datetime(locale='fr', pattern='dd/MM/yyyy HH:mm') }}</div>
+                                            </div>
+                                            <div class="chat-msg-content">
+                                                <span class="mb-0 ms-2 badge text-bg-secondary">{{ message.userTo }}</span>
+                                                <div class="chat-msg-text">{{ message.content }}</div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- MESSAGES DE L'UTILISATEUR -->
+                                    {% if message.userFrom == app.user %}
+                                        <div class="chat-msg owner">
+                                            <div class="chat-msg-profile">
+                                                <div class="chat-msg-date">{{ message.dateEnvoi|format_datetime(locale='fr', pattern='dd/MM/yyyy HH:mm') }}</div>
+                                            </div>
+                                            <div class="chat-msg-content">
+                                                <div class="chat-msg-text">{{ message.content }}</div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                {% endfor %}
+                            {% else %}
+                                <p>Aucun message pour le moment</p>
+                            {% endif %}
+                            <!-- MESSAGE DESTINATAIRE -->
+                            <!--
+                            <div class="chat-msg">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">05/09/2024 14:00</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <span class="mb-0 ms-2 badge text-bg-secondary">User 1</span>
+                                    <div class="chat-msg-text">Message destinataire</div>
+                                </div>
+                            </div> -->
+                            <!-- / MESSAGE DESTINATAIRE -->
+
+
+                            <!-- MESSAGE EXPÉDITEUR -->
+                            <!--
+                            <div class="chat-msg owner">
+                                <div class="chat-msg-profile">
+                                    <div class="chat-msg-date">10/09/2024 19:00</div>
+                                </div>
+                                <div class="chat-msg-content">
+                                    <div class="chat-msg-text">Message expéditeur</div>
+                                </div>
+                            </div> -->
+                            <!-- / MESSAGE EXPÉDITEUR -->
+
+                        </div>
+                    </div>
+                    {{ form_start(ChatForm) }}
+                        <div class="card-footer">
+                            <div class="form-floating mb-3">
+                                {{ form_row(ChatForm.content) }}
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary">Envoyer</button>
+                            </div>
+                        </div>
+                    {{ form_end(ChatForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
