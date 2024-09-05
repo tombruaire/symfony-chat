@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Messages;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,10 +20,24 @@ class MessagesRepository extends ServiceEntityRepository
     /**
      * @return Messages[] Returns an array of Messages objects
      */
-    public function finAllMessages(): array
+    public function findAllMessages(): array
     {
         return $this->createQueryBuilder('m')
             ->where('m.userTo IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Messages[] Returns an array of Messages objects
+     */
+    public function findByMessagesUserTo(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m.id, IDENTITY(m.userFrom) as userFrom, IDENTITY(m.userTo) as userTo, m.content, m.dateEnvoi, u1.username as destinataire, u2.username as expediteur')
+            ->innerJoin(User::class, 'u1', 'WITH', 'm.userFrom = u1.id')
+            ->innerJoin(User::class, 'u2', 'WITH', 'm.userTo = u2.id')
+            ->groupBy('m.id, m.userFrom, m.userTo, m.content, m.dateEnvoi, u1.username, u2.username')
             ->getQuery()
             ->getResult();
     }
