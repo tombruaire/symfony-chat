@@ -28,10 +28,8 @@ class HomeController extends AbstractController
         $form = $this->createForm(ChatType::class, $message);
         $form->handleRequest($request);
 
-        $userForm = $this->getUser();
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $message->setUserFrom($userForm);
+            $message->setUserFrom($this->getUser());
             $message->setUserTo(null);
 
             // Création d'une nouvelle instance de DateTime
