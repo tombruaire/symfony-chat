@@ -4,7 +4,7 @@
 
 {% block body %}
     {% if app.user.id == cibleId %}
-        {% if demandeStatut != "accepte" %}
+        {% if demandeStatut == "envoye" %}
             <div class="container mt-4">
                 <div class="row d-flex justify-content-center">
                     <div class="col-auto">
