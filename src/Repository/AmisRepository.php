@@ -54,14 +54,28 @@ class AmisRepository extends ServiceEntityRepository
     public function findDemandesCible($idCible): array
     {
         return $this->createQueryBuilder('a')
-            ->select('a.id, u1.username as demandeur, u2.username as cible, a.cible')
+            ->select('a.id, a.demandeur as demandeur_id, u1.username as demandeur, a.cible as cible_id, u2.username as cible, a.demande')
             ->innerJoin(User::class, 'u1', 'WITH', 'u1.id = a.demandeur')
             ->innerJoin(User::class, 'u2', 'WITH', 'u2.id = a.cible')
             ->where('a.cible = :idCible')
-            ->groupBy('a.id, u1.username, u2.username, a.cible')
+            ->groupBy('a.id, a.demandeur, u1.username, a.cible, u2.username, a.cible, a.demande')
             ->setParameter('idCible', $idCible)
             ->getQuery()
             ->getResult();
+    }
+
+    public function acceptDemande($idDemandeur, $idCible): void
+    {
+        $this->createQueryBuilder('a')
+            ->update(Amis::class, 'a')
+            ->set('a.demande', ':demande')
+            ->where('a.demandeur = :demandeur')
+            ->andWhere('a.cible = :cible')
+            ->setParameter('demande', 'accepte')
+            ->setParameter('demandeur', $idDemandeur)
+            ->setParameter('cible', $idCible)
+            ->getQuery()
+            ->execute();
     }
 
 //    /**
