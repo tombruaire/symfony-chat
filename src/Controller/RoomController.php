@@ -31,6 +31,17 @@ class RoomController extends AbstractController
         // Récupération de l'id de l'ami (la cible)
         $idCible = $userTo->getId();
 
+        $usernamesCible = $entityManager->getRepository(User::class)->findCibleId();
+        $idUserCible = "";
+        $idUserCibleAmis = "";
+        $usernamesCibleAmis = "";
+        foreach ($usernamesCible as $usernameCible) {
+            $idUserCible .= $usernameCible["id"];
+            $idUserCibleAmis .= $usernameCible["cible"];
+            $usernamesCibleAmis .= $usernameCible["username"];
+            break;
+        }
+
         $statutDemandeAmi = null;
         if ($entityManager->getRepository(Amis::class)->findByCheckStatut($idDemandeur, $idCible)) {
             $statutDemandeAmi = $entityManager->getRepository(Amis::class)->findByCheckStatut($idDemandeur, $idCible)[0]["demande"];
@@ -90,6 +101,9 @@ class RoomController extends AbstractController
             'formDemandeAmi' => $formDemandeAmi,
             'formAnnulerDemandeAmi' => $formAnnulerDemandeAmi,
             'statutDemandeAmi' => $statutDemandeAmi,
+            'idUserCible' => $idUserCible,
+            'idUserCibleAmis' => $idUserCibleAmis,
+            'usernamesCibleAmis' => $usernamesCibleAmis,
         ]);
     }
 }
