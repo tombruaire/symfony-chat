@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Amis;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +25,7 @@ class AccepterDemandeAmisType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'data_class' => Amis::class,
         ]);
     }
 }
