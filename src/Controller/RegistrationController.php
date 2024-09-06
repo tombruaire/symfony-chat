@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\CheckboxTwoFARegisterType;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -84,6 +85,18 @@ class RegistrationController extends AbstractController
                     return $token;
                 }
                 $user->setToken(generateToken());
+
+                // Définition du statut de l'utilisateur (en ligne)
+                $user->setOnline(false);
+
+                // Si la checkbox de la Double authentification est cochée
+                if ($form["activate_2fa"]->getData() === true) {
+                    // Activation de la Double authentification pour l'utilisateur
+                    $user->setTwofa(true);
+                } else { // Si la checkbox n'est pas cochée
+                    // Ne pas activer la Double authentification
+                    $user->setTwofa(false);
+                }
 
                 // Ajout du nouvel utilisateur dans la base de données
                 $entityManager->persist($user);
