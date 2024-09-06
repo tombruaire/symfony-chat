@@ -56,6 +56,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $online = null;
 
+    #[ORM\Column]
+    private ?bool $twofa = null;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -209,6 +212,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setOnline(bool $online): static
     {
         $this->online = $online;
+
+        return $this;
+    }
+
+    public function isTwofa(): ?bool
+    {
+        return $this->twofa;
+    }
+
+    public function setTwofa(bool $twofa): static
+    {
+        $this->twofa = $twofa;
 
         return $this;
     }
