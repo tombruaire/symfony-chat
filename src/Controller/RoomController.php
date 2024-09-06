@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Messages;
 use App\Entity\User;
 use App\Form\ChatType;
+use App\Form\DemandeAmiType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,12 +38,21 @@ class RoomController extends AbstractController
             $entityManager->flush();
         }
 
+        /*** Ajout d'ami ***/
+        $formDemandeAmi = $this->createForm(DemandeAmiType::class);
+        $formDemandeAmi->handleRequest($request);
+
+        if ($formDemandeAmi->isSubmitted() && $formDemandeAmi->isValid()) {
+            //
+        }
+
         return $this->render('room/index.html.twig', [
             'controller_name' => 'RoomController',
             'users' => $entityManager->getRepository(User::class)->findAll(),
             'ChatForm' => $form,
             'messages' => $entityManager->getRepository(Messages::class)->findByMessagesUserTo(),
             'username' => $username,
+            'formDemandeAmi' => $formDemandeAmi,
         ]);
     }
 }
