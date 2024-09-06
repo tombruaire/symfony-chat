@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\ModifierMdpType;
 use App\Form\SupprimerCompteType;
+use App\Form\TwoFADesactiverType;
+use App\Form\TwoFAType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -21,7 +23,29 @@ class ProfilController extends AbstractController
     #[IsGranted(new Expression('is_authenticated()'))]
     public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-        $alert = "";
+        $alertDanger = "";
+        $alertSuccess = "";
+
+        $alertActivate2FA = "";
+        $alertDesactivate2FA = "";
+
+        /*** Activation de la Double Authentification ***/
+        $formActiver2FA = $this->createForm(TwoFAType::class);
+        $formActiver2FA->handleRequest($request);
+
+        if ($formActiver2FA->isSubmitted() && $formActiver2FA->isValid()) {
+            $entityManager->getRepository(User::class)->activer2FA($this->getUser());
+            $alertActivate2FA .= "Double authentification activée !";
+        }
+
+        /*** Désactivation de la Double Authentification ***/
+        $formDesactiver2FA = $this->createForm(TwoFADesactiverType::class);
+        $formDesactiver2FA->handleRequest($request);
+
+        if ($formDesactiver2FA->isSubmitted() && $formDesactiver2FA->isValid()) {
+            $entityManager->getRepository(User::class)->desactiver2FA($this->getUser());
+            $alertDesactivate2FA .= "Double authentification désactivée !";
+        }
 
         /*** Modification du mot de passe ***/
         $formModifierMdp = $this->createForm(ModifierMdpType::class);
@@ -51,7 +75,12 @@ class ProfilController extends AbstractController
 
         return $this->render('profil/index.html.twig', [
             'controller_name' => 'ProfilController',
-            'alert' => $alert,
+            'alertDanger' => $alertDanger,
+            'alertSuccess' => $alertSuccess,
+            'alertActivate2FA' => $alertActivate2FA,
+            'alertDesactivate2FA' => $alertDesactivate2FA,
+            'Activer2FAForm' => $formActiver2FA,
+            'Desactiver2FAForm' => $formDesactiver2FA,
             'ModifierMdpForm' => $formModifierMdp,
             'SupprimerCompteForm' => $formSupprimerCompte,
         ]);
