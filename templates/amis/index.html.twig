@@ -3,6 +3,53 @@
 {% block title %}{{ parent() }} | Amis{% endblock %}
 
 {% block body %}
+    {% if app.user.id == cibleId %}
+    <div class="container mt-4">
+        <div class="row d-flex justify-content-center">
+            <div class="col-auto">
+                {% if nbDemande != 0 %}
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalAccepterDemandeAmi">
+                    Vous avez <span class="badge text-bg-primary">{{ nbDemande }}</span>
+                    {% if nbDemande > 1 %}
+                        demandes
+                    {% endif %}
+                    {% if nbDemande == 1 %}
+                    demande
+                    {% endif %}
+                    d'amis
+                </button>
+                <div class="modal fade" id="modalAccepterDemandeAmi" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Demandes d'amis</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="post" action="">
+                                <div class="modal-body">
+                                    {% for demande in demandes %}
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <span>{{ demande.demandeur }}</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="button" class="btn btn-success me-2">Accepter</button>
+                                                <button type="button" class="btn btn-danger">Refuser</button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    {% endfor %}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="container mt-4">
         <div class="row d-flex justify-content-center">
             <div class="col-md-5">
