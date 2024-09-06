@@ -89,12 +89,9 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="form-check">
-                                <input type="checkbox" id="enable-2fa" class="form-check-input border border-1 border-success">
-                                <label for="enable-2fa" class="form-check-label">
-                                    Activer la double authentification (2FA)
-                                </label>
-                            </div>
+                                <div class="form-check">
+                                    {{ form_row(registrationForm.activate_2fa) }}
+                                </div>
                         </div>
                         <div class="card-footer">
                             <div class="row d-flex justify-content-center">
