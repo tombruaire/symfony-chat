@@ -21,7 +21,7 @@ class AmisController extends AbstractController
     {
         $userId = $this->getUser()->getId();
 
-        $demandes = $entityManager->getRepository(Amis::class)->findDemandesCible($this->getUser()->getId());
+        $demandes = $entityManager->getRepository(Amis::class)->findDemandesCible2($this->getUser()->getId());
         $cibleId = "";
         $demandeurId = "";
         $demandeStatut = "";
