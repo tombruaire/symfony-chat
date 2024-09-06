@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use AllowDynamicProperties;
+use App\Entity\Amis;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -118,6 +119,16 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
     {
         $user->setTwofa(false);
         $this->getEntityManager()->flush();
+    }
+
+    public function findCibleId(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.id, u.username, a.cible')
+            ->innerJoin(Amis::class, 'a', 'WITH', 'u.id = a.cible')
+            ->groupBy('u.id, u.username, a.cible')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
