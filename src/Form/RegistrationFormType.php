@@ -107,7 +107,14 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Votre mot de passe doit contenir un caractère spécial',
                     ]),
                 ],
-
+            ])
+            ->add('activate_2fa', CheckboxType::class, [
+                'label' => 'Activer la double authentification',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-check-input border border-1 border-success'
+                ]
             ])
         ;
     }
