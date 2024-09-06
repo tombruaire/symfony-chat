@@ -16,6 +16,30 @@ class AmisRepository extends ServiceEntityRepository
         parent::__construct($registry, Amis::class);
     }
 
+    public function findByCheckStatut($idDemandeur, $idCible): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.demande')
+            ->where('a.demandeur = :idDemandeur')
+            ->andWhere('a.cible = :idCible')
+            ->setParameter('idDemandeur', $idDemandeur)
+            ->setParameter('idCible', $idCible)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function annulerDemandeAmi($idDemandeur, $idCible): void
+    {
+        $this->createQueryBuilder('a')
+            ->delete(Amis::class, 'a')
+            ->where('a.demandeur = :idDemandeur')
+            ->andWhere('a.cible = :idCible')
+            ->setParameter('idDemandeur', $idDemandeur)
+            ->setParameter('idCible', $idCible)
+            ->getQuery()
+            ->execute();
+    }
+
 //    /**
 //     * @return Amis[] Returns an array of Amis objects
 //     */
