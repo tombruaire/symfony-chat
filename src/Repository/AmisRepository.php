@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Amis;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,29 @@ class AmisRepository extends ServiceEntityRepository
             ->setParameter('idCible', $idCible)
             ->getQuery()
             ->execute();
+    }
+
+    public function countDemandeAmi($idCible): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->where('a.cible = :idCible')
+            ->setParameter('idCible', $idCible)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findDemandesCible($idCible): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.id, u1.username as demandeur, u2.username as cible, a.cible')
+            ->innerJoin(User::class, 'u1', 'WITH', 'u1.id = a.demandeur')
+            ->innerJoin(User::class, 'u2', 'WITH', 'u2.id = a.cible')
+            ->where('a.cible = :idCible')
+            ->groupBy('a.id, u1.username, u2.username, a.cible')
+            ->setParameter('idCible', $idCible)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
