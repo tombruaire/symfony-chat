@@ -108,6 +108,18 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
             ->getOneOrNullResult(); // Utilisation de "getOneOrNullResult" pour obtenir un résultat ou null
     }
 
+    public function activer2FA($user): void
+    {
+        $user->setTwofa(true);
+        $this->getEntityManager()->flush();
+    }
+
+    public function desactiver2FA($user): void
+    {
+        $user->setTwofa(false);
+        $this->getEntityManager()->flush();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
