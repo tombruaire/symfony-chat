@@ -31,14 +31,14 @@ class RoomController extends AbstractController
         // Récupération de l'id de l'ami (la cible)
         $idCible = $userTo->getId();
 
-        $usernamesCible = $entityManager->getRepository(User::class)->findCibleId();
+        $usernamesCible = $entityManager->getRepository(Amis::class)->findDemandesCible($idCible);
         $idUserCible = "";
         $idUserCibleAmis = "";
         $usernamesCibleAmis = "";
         foreach ($usernamesCible as $usernameCible) {
-            $idUserCible .= $usernameCible["id"];
-            $idUserCibleAmis .= $usernameCible["cible"];
-            $usernamesCibleAmis .= $usernameCible["username"];
+            $idUserCible .= $usernameCible["demandeur_id"];
+            $idUserCibleAmis .= $usernameCible["cible_id"];
+            $usernamesCibleAmis .= $usernameCible["cible"];
             break;
         }
 
