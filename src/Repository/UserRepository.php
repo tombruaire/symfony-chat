@@ -124,9 +124,9 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
     public function findCibleId(): array
     {
         return $this->createQueryBuilder('u')
-            ->select('u.id, u.username, a.cible')
-            ->innerJoin(Amis::class, 'a', 'WITH', 'u.id = a.cible')
-            ->groupBy('u.id, u.username, a.cible')
+            ->select('u.id, u.username, a1.demandeur as demandeur_id, a.cible, a.demande')
+            ->innerJoin(Amis::class, 'a1', 'WITH', 'u.id = a.cible')
+            ->groupBy('u.id, u.username, a.demandeur, a.cible, a.demande')
             ->getQuery()
             ->getResult();
     }

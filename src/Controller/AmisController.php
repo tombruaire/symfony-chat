@@ -63,6 +63,7 @@ class AmisController extends AbstractController
             'formAcceptationDemandeAmis' => $formAcceptationDemandeAmis,
             'formRefusDemandeAmis' => $formRefusDemandeAmis,
             'demandeStatut' => $demandeStatut,
+            'amis' => $entityManager->getRepository(Amis::class)->findAllAmis($this->getUser()->getId()),
         ]);
     }
 }
