@@ -85,6 +85,9 @@
                                         {{ form_row(formAnnulerDemandeAmi.annuler) }}
                                         {{ form_end(formAnnulerDemandeAmi) }}
                                     {% endif %}
+                                    {% if statutDemandeAmi == "accepte" %}
+                                        <p class="text-success fw-bold">Vous êtes amis !</p>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
