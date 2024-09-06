@@ -46,7 +46,9 @@ class AmisRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->select('COUNT(a)')
             ->where('a.cible = :idCible')
+            ->andWhere('a.demande = :demande')
             ->setParameter('idCible', $idCible)
+            ->setParameter('demande', 'envoye')
             ->getQuery()
             ->getSingleScalarResult();
     }
@@ -60,6 +62,21 @@ class AmisRepository extends ServiceEntityRepository
             ->where('a.cible = :idCible')
             ->groupBy('a.id, a.demandeur, u1.username, a.cible, u2.username, a.cible, a.demande')
             ->setParameter('idCible', $idCible)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findDemandesCible2($idCible): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.id, a.demandeur as demandeur_id, u1.username as demandeur, a.cible as cible_id, u2.username as cible, a.demande')
+            ->innerJoin(User::class, 'u1', 'WITH', 'u1.id = a.demandeur')
+            ->innerJoin(User::class, 'u2', 'WITH', 'u2.id = a.cible')
+            ->where('a.cible = :idCible')
+            ->andWhere('a.demande = :demande')
+            ->groupBy('a.id, a.demandeur, u1.username, a.cible, u2.username, a.cible, a.demande')
+            ->setParameter('idCible', $idCible)
+            ->setParameter('demande', 'envoye')
             ->getQuery()
             ->getResult();
     }
@@ -84,7 +101,7 @@ class AmisRepository extends ServiceEntityRepository
             ->select('a.id, a.demandeur as demandeur_id, u1.username as demandeur, a.cible as cible_id, u2.username as cible, a.demande')
             ->innerJoin(User::class, 'u1', 'WITH', 'u1.id = a.demandeur')
             ->innerJoin(User::class, 'u2', 'WITH', 'u2.id = a.cible')
-            ->where('a.cible = :idCible')
+            ->where('a.demandeur != :idCible')
             ->andWhere('a.demande = :demande')
             ->groupBy('a.id, a.demandeur, u1.username, a.cible, u2.username, a.cible, a.demande')
             ->setParameter('idCible', $userId)
