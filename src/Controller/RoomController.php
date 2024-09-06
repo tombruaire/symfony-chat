@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\Amis;
 use App\Entity\Messages;
 use App\Entity\User;
+use App\Form\AnnulerDemandeAmiType;
 use App\Form\ChatType;
 use App\Form\DemandeAmiType;
+use App\Repository\AmisRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +26,15 @@ class RoomController extends AbstractController
 
         $userTo = $entityManager->getRepository(User::class)->findUserTo($username);
 
-        $alertDemandeAmi = "";
+        // Récupération de l'id du demandeur
+        $idDemandeur = $this->getUser()->getId();
+        // Récupération de l'id de l'ami (la cible)
+        $idCible = $userTo->getId();
+
+        $statutDemandeAmi = null;
+        if ($entityManager->getRepository(Amis::class)->findByCheckStatut($idDemandeur, $idCible)) {
+            $statutDemandeAmi = $entityManager->getRepository(Amis::class)->findByCheckStatut($idDemandeur, $idCible)[0]["demande"];
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $message->setUserFrom($this->getUser());
@@ -47,11 +57,6 @@ class RoomController extends AbstractController
         $formDemandeAmi->handleRequest($request);
 
         if ($formDemandeAmi->isSubmitted() && $formDemandeAmi->isValid()) {
-            // Récupération de l'id du demandeur
-            $idDemandeur = $this->getUser()->getId();
-            // Récupération de l'id de l'ami (la cible)
-            $idCible = $userTo->getId();
-
             // Définition des valeurs
             $amis->setDemandeur($idDemandeur);
             $amis->setCible($idCible);
@@ -60,6 +65,20 @@ class RoomController extends AbstractController
             // Ajout dans la base de données
             $entityManager->persist($amis);
             $entityManager->flush();
+
+            return $this->redirectToRoute('app_room', ['username' => $username]);
+        }
+
+        /*** Annulation demande amis ***/
+        $formAnnulerDemandeAmi = $this->createForm(AnnulerDemandeAmiType::class);
+        $formAnnulerDemandeAmi->handleRequest($request);
+
+        if ($formAnnulerDemandeAmi->isSubmitted() && $formAnnulerDemandeAmi->isValid()) {
+            $entityManager->getRepository(Amis::class)->annulerDemandeAmi($idDemandeur, $idCible);
+            // Suppression dans la base de données
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_room', ['username' => $username]);
         }
 
         return $this->render('room/index.html.twig', [
@@ -69,6 +88,8 @@ class RoomController extends AbstractController
             'messages' => $entityManager->getRepository(Messages::class)->findByMessagesUserTo(),
             'username' => $username,
             'formDemandeAmi' => $formDemandeAmi,
+            'formAnnulerDemandeAmi' => $formAnnulerDemandeAmi,
+            'statutDemandeAmi' => $statutDemandeAmi,
         ]);
     }
 }
