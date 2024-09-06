@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Amis;
 use App\Entity\Messages;
 use App\Entity\User;
 use App\Form\ChatType;
@@ -23,6 +24,8 @@ class RoomController extends AbstractController
 
         $userTo = $entityManager->getRepository(User::class)->findUserTo($username);
 
+        $alertDemandeAmi = "";
+
         if ($form->isSubmitted() && $form->isValid()) {
             $message->setUserFrom($this->getUser());
             $message->setUserTo($userTo);
@@ -39,11 +42,24 @@ class RoomController extends AbstractController
         }
 
         /*** Ajout d'ami ***/
-        $formDemandeAmi = $this->createForm(DemandeAmiType::class);
+        $amis = new Amis();
+        $formDemandeAmi = $this->createForm(DemandeAmiType::class, $amis);
         $formDemandeAmi->handleRequest($request);
 
         if ($formDemandeAmi->isSubmitted() && $formDemandeAmi->isValid()) {
-            //
+            // Récupération de l'id du demandeur
+            $idDemandeur = $this->getUser()->getId();
+            // Récupération de l'id de l'ami (la cible)
+            $idCible = $userTo->getId();
+
+            // Définition des valeurs
+            $amis->setDemandeur($idDemandeur);
+            $amis->setCible($idCible);
+            $amis->setDemande("envoye");
+
+            // Ajout dans la base de données
+            $entityManager->persist($amis);
+            $entityManager->flush();
         }
 
         return $this->render('room/index.html.twig', [
